@@ -1,0 +1,779 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#FAFAF8">
+  <meta name="description" content="Leon's Lab，记录个人项目、技术实践与一些思考。先记录，后包装，让每次探索留下线索。">
+  <title>Leon's Lab · 记录与实践</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2318181b'/%3E%3Cpath d='M21 16v32h25' fill='none' stroke='%23fafaf8' stroke-width='6'/%3E%3Ccircle cx='44' cy='21' r='5' fill='%232563eb'/%3E%3C/svg%3E">
+  <style>
+    :root { --bg:#fafaf8; --ink:#18181b; --muted:#64646d; --accent:#2563eb; --line:#e7e7e4; --paper:#f1f1ed; --white:#fff; --max:1080px; --reading:760px; --radius:12px; --ease:180ms ease; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+    body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; -webkit-font-smoothing:antialiased; }
+    ::selection { background:#dbe7ff; color:var(--ink); }
+    a { color:inherit; text-decoration:none; }
+    button { font:inherit; cursor:pointer; }
+    a,button { -webkit-tap-highlight-color:transparent; }
+    a:focus-visible,button:focus-visible,[tabindex="-1"]:focus-visible { outline:3px solid var(--accent); outline-offset:5px; border-radius:3px; }
+    [hidden] { display:none !important; }
+    .wrap { width:min(var(--max),calc(100% - 64px)); margin-inline:auto; }
+    .skip { position:fixed; z-index:10; top:12px; left:16px; padding:8px 16px; background:var(--ink); color:white; transform:translateY(-180%); }
+    .skip:focus { transform:none; }
+    .header { border-bottom:1px solid var(--line); }
+    .header-inner { min-height:88px; display:flex; justify-content:space-between; align-items:center; gap:24px; }
+    .brand { display:inline-flex; align-items:center; gap:12px; min-height:44px; font-size:20px; font-weight:650; letter-spacing:-.7px; white-space:nowrap; }
+    .brand-mark { display:flex; position:relative; align-items:center; justify-content:center; width:31px; height:33px; background:var(--ink); border-radius:6px; color:var(--bg); font:600 24px/1 Georgia,serif; }
+    .brand-mark:after { content:""; position:absolute; width:5px; height:5px; border-radius:50%; background:#78a0ff; right:5px; top:7px; }
+    .nav { display:flex; gap:30px; }
+    .nav a { min-height:44px; display:flex; align-items:center; position:relative; font-size:14px; color:var(--muted); }
+    .nav a:hover,.nav a[aria-current="page"] { color:var(--ink); }
+    .nav a[aria-current="page"]:after { content:""; position:absolute; height:2px; background:var(--accent); bottom:-22px; left:0; right:0; }
+    main { min-height:calc(100vh - 208px); }
+    .hero { display:grid; grid-template-columns:1.6fr 1fr; gap:64px; align-items:center; padding:76px 0 68px; }
+    .eyebrow { margin:0 0 20px; display:flex; align-items:center; gap:9px; font:11px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace; letter-spacing:1.5px; color:var(--muted); }
+    .eyebrow:before { content:""; width:6px; height:6px; background:var(--accent); display:inline-block; border-radius:50%; }
+    h1,h2,h3,h4,p { margin-top:0; }
+    .hero h1 { margin:0 0 24px; font-size:clamp(36px,4.5vw,54px); line-height:1.3; letter-spacing:-2px; font-weight:650; }
+    .hero h1 .subtle { color:#7c7c83; }
+    .intro { color:var(--muted); font-size:16px; line-height:1.9; max-width:450px; margin-bottom:25px; }
+    .hero-links { display:flex; gap:28px; flex-wrap:wrap; }
+    .text-link { display:inline-flex; gap:14px; align-items:center; min-height:44px; font-size:14px; }
+    .text-link.primary { color:var(--accent); }
+    .arrow { display:inline-block; transition:transform var(--ease); }
+    a:hover .arrow { transform:translate(3px,-2px); }
+    .note { position:relative; min-height:278px; padding:26px 28px; border:1px solid var(--line); border-radius:var(--radius); background:var(--paper); }
+    .note-top { display:flex; justify-content:space-between; gap:12px; font:10px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace; letter-spacing:1px; color:var(--muted); padding-bottom:18px; border-bottom:1px solid #d8d8d2; }
+    .note-quote { font-size:37px; letter-spacing:2px; font-weight:550; line-height:1.5; margin:23px 0 20px; }
+    .note-quote span { color:var(--accent); }
+    .note-bottom { color:var(--muted); display:flex; align-items:center; justify-content:space-between; font-size:11px; letter-spacing:.3px; }
+    .note-icon { width:27px; height:27px; display:inline-flex; align-items:center; justify-content:center; border:1px solid #b7b7b0; border-radius:50%; font-size:16px; color:var(--ink); }
+    .section { padding:32px 0 38px; border-top:1px solid var(--line); }
+    .section-head { display:flex; align-items:center; justify-content:space-between; gap:20px; margin-bottom:22px; }
+    .section-heading { display:flex; align-items:baseline; gap:13px; }
+    .section-heading h2 { margin:0; font-size:19px; letter-spacing:-.5px; font-weight:600; }
+    .section-index { font:10px/1 ui-monospace,Consolas,monospace; color:var(--muted); }
+    .section-head .text-link { color:var(--muted); font-size:12px; }
+    .writing-list { list-style:none; padding:0; margin:0; }
+    .writing-item { border-top:1px solid var(--line); }
+    .writing-item:first-child { border-top:0; }
+    .writing-link { display:grid; grid-template-columns:116px 1fr 24px; gap:12px; padding:21px 0; align-items:start; }
+    time { font:12px/1.8 ui-monospace,SFMono-Regular,Consolas,monospace; color:var(--muted); white-space:nowrap; }
+    .writing-link h3 { font-weight:550; font-size:17px; line-height:1.6; margin:0 0 5px; }
+    .writing-link p { font-size:13px; color:var(--muted); margin:0; line-height:1.8; }
+    .writing-link>.arrow { color:var(--muted); font-size:18px; text-align:right; }
+    .writing-link:hover h3 { color:var(--accent); }
+    .project-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; }
+    .project-card { position:relative; display:flex; flex-direction:column; padding:25px 26px; background:var(--white); border:1px solid var(--line); border-radius:var(--radius); transition:border-color var(--ease),background var(--ease); }
+    .project-card:hover { border-color:#b9c9ec; background:#fdfefe; }
+    .project-top { display:flex; justify-content:space-between; gap:16px; align-items:center; margin-bottom:20px; }
+    .project-monogram { font:14px/1 ui-monospace,Consolas,monospace; color:var(--accent); }
+    .status { display:inline-flex; align-items:center; gap:6px; font-size:11px; color:#595b60; padding:3px 9px; border:1px solid var(--line); border-radius:30px; }
+    .status:before { content:""; display:inline-block; width:5px; height:5px; background:var(--accent); border-radius:50%; }
+    .project-card h3 { font-size:21px; font-weight:600; letter-spacing:-.5px; margin:0 0 9px; }
+    .project-card p { font-size:13px; color:var(--muted); margin:0 0 22px; }
+    .project-bottom { display:flex; gap:15px; align-items:center; justify-content:space-between; margin-top:auto; }
+    .tech { display:flex; flex-wrap:wrap; gap:8px 12px; font:10px/1.6 ui-monospace,Consolas,monospace; color:var(--muted); }
+    .project-bottom .arrow { font-size:20px; color:var(--accent); }
+    .footer { margin-top:24px; border-top:1px solid var(--line); }
+    .footer-inner { min-height:98px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; column-gap:22px; padding-block:23px; color:var(--muted); font-size:11px; }
+    .footer p { margin:0; }
+    .footer-links { display:flex; gap:18px; }
+    .footer a { display:inline-flex; min-height:44px; align-items:center; }
+    .page-heading { padding:65px 0 35px; }
+    .page-heading h1 { font-size:38px; line-height:1.35; margin:0 0 13px; font-weight:600; letter-spacing:-1px; }
+    .page-heading p { color:var(--muted); margin:0; font-size:15px; }
+    .listing { padding-bottom:72px; }
+    .listing .writing-link { padding:28px 0; }
+    .reading { max-width:var(--reading); margin-inline:auto; min-width:0; }
+    .back { display:inline-flex; align-items:center; min-height:44px; gap:9px; font-size:12px; color:var(--muted); margin-bottom:32px; }
+    .back:hover { color:var(--accent); }
+    .detail { padding:35px 0 68px; }
+    .detail-header { padding-bottom:30px; margin-bottom:30px; border-bottom:1px solid var(--line); }
+    .detail-header h1 { font-size:clamp(28px,4vw,38px); line-height:1.45; letter-spacing:-1px; font-weight:600; margin-bottom:16px; overflow-wrap:anywhere; }
+    .detail-description { font-size:16px; color:var(--muted); margin-bottom:20px; }
+    .detail-meta { display:flex; gap:15px; align-items:center; flex-wrap:wrap; font-size:12px; color:var(--muted); }
+    .article { font-size:16px; line-height:1.85; overflow-wrap:anywhere; }
+    .article h2 { font-size:24px; font-weight:600; line-height:1.5; margin:45px 0 18px; letter-spacing:-.5px; }
+    .article h3 { font-size:19px; font-weight:600; line-height:1.6; margin:30px 0 14px; }
+    .article p { margin:0 0 18px; }
+    .article ul,.article ol { padding-left:24px; margin:0 0 22px; }
+    .article li { margin-block:7px; }
+    .article a { color:var(--accent); text-decoration:underline; text-underline-offset:4px; }
+    .article strong { font-weight:600; }
+    .article blockquote { border-left:2px solid #9bb6ec; margin:24px 0; padding:5px 0 5px 20px; color:var(--muted); }
+    .article blockquote p:last-child { margin-bottom:0; }
+    .article code { font:13px/1.8 ui-monospace,SFMono-Regular,Consolas,monospace; padding:2px 5px; border-radius:4px; background:#eeeEEa; overflow-wrap:anywhere; }
+    .article pre { max-width:100%; overflow-x:auto; background:#efefeb; border:1px solid var(--line); border-radius:8px; padding:18px 20px; margin:24px 0; }
+    .article pre code { padding:0; border-radius:0; background:none; white-space:pre; overflow-wrap:normal; font-size:12px; }
+    .table-scroll { max-width:100%; overflow-x:auto; margin:24px 0; }
+    .article table { width:100%; min-width:470px; border-collapse:collapse; font-size:13px; line-height:1.8; text-align:left; }
+    .article th { background:#f0f0ec; font-weight:600; }
+    .article th,.article td { padding:11px 13px; border:1px solid var(--line); vertical-align:top; }
+    .article img { display:block; max-width:100%; height:auto; border-radius:8px; }
+    .article .checklist { list-style:none; padding-left:0; }
+    .check-mark { color:var(--muted); margin-right:8px; }
+    .implementation-note { margin:0 0 30px; padding:17px 19px; border:1px solid #dbe3f0; border-radius:8px; background:#f2f5fb; font-size:13px; line-height:1.85; color:#475569; }
+    .implementation-note strong { font-weight:600; color:#293a55; }
+    .detail-end { border-top:1px solid var(--line); padding-top:22px; margin-top:40px; display:flex; justify-content:space-between; align-items:center; gap:15px; }
+    .download { border:1px solid var(--line); border-radius:6px; background:transparent; color:var(--muted); padding:9px 13px; min-height:44px; font-size:12px; }
+    .download:hover { color:var(--accent); border-color:#b9c9ec; }
+    .empty { margin:30px 0; padding:30px; border:1px dashed var(--line); border-radius:var(--radius); color:var(--muted); font-size:14px; }
+    .not-found { padding:100px 0; text-align:center; }
+    .not-found .code { font:14px/1.5 ui-monospace,Consolas,monospace; color:var(--accent); letter-spacing:4px; }
+    .not-found h1 { font-weight:600; font-size:32px; margin-top:15px; }
+    .not-found p { color:var(--muted); font-size:14px; }
+    @media(max-width:767px) {
+      .wrap { width:calc(100% - 40px); }
+      .header-inner { min-height:74px; gap:15px; }
+      .brand { font-size:18px; gap:9px; }
+      .brand-mark { width:28px; height:30px; font-size:22px; }
+      .nav { gap:23px; }
+      .nav a { font-size:13px; }
+      .nav a[aria-current="page"]:after { bottom:-15px; }
+      .hero { grid-template-columns:1fr; gap:32px; padding:46px 0 40px; }
+      .hero h1 { font-size:38px; letter-spacing:-1.6px; }
+      .intro { font-size:14px; max-width:100%; }
+      .note { min-height:180px; padding:18px 23px; }
+      .note-top { padding-bottom:12px; }
+      .note-quote { margin:13px 0; font-size:28px; line-height:1.5; }
+      .note-quote br { display:none; }
+      .note-quote span { margin-left:8px; }
+      .section { padding:25px 0; }
+      .section-head { margin-bottom:10px; }
+      .section-heading { gap:10px; }
+      .section-heading h2 { font-size:18px; }
+      .writing-link { grid-template-columns:1fr 22px; row-gap:6px; }
+      .writing-link time { grid-column:1/-1; font-size:11px; }
+      .writing-link h3 { font-size:16px; }
+      .writing-link p { font-size:12px; }
+      .project-grid { grid-template-columns:1fr; }
+      .project-card { padding:22px; }
+      .footer-inner { min-height:100px; display:block; padding-block:20px; }
+      .footer-inner>p+p { margin-top:5px; }
+      .page-heading { padding:44px 0 28px; }
+      .page-heading h1 { font-size:32px; }
+      .page-heading p { font-size:14px; }
+      .detail { padding-top:23px; }
+      .back { margin-bottom:23px; }
+      .detail-header { padding-bottom:23px; margin-bottom:23px; }
+      .detail-description { font-size:14px; }
+      .article { font-size:15px; }
+      .article h2 { font-size:22px; margin-top:36px; }
+      .article h3 { font-size:18px; }
+      .article pre { padding:15px; }
+      .detail-end { flex-wrap:wrap; }
+    }
+    @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } *,*:before,*:after { transition:none !important; animation:none !important; } }
+    @media print { .header,.footer,.back,.detail-end,.implementation-note,.skip { display:none; } body { background:white; color:black; } .wrap { width:100%; } .detail { padding:0; } .article pre { white-space:pre-wrap; } .article pre code { white-space:pre-wrap; } .article table { min-width:0; } h2,h3 { break-after:avoid; } }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">跳到主要内容</a>
+  <header class="header"><div class="wrap header-inner">
+    <a class="brand" href="#/" aria-label="Leon's Lab 返回首页"><span class="brand-mark" aria-hidden="true">l</span><span data-site-name>Leon's Lab</span></a>
+    <nav class="nav" aria-label="主要导航"><a href="#/writing/" data-nav="writing">文章</a><a href="#/projects/" data-nav="projects">项目</a></nav>
+  </div></header>
+  <main id="main" class="wrap" tabindex="-1">
+    <section class="hero" aria-labelledby="home-title">
+      <div>
+        <p class="eyebrow">LEON / A PERSONAL WORKSPACE</p>
+        <h1 id="home-title" tabindex="-1">把问题想清楚，<br><span class="subtle">把实践留下来。</span></h1>
+        <p class="intro">你好，我是 Leon。这里记录我的个人项目、技术实践与一些思考。从一个具体问题出发，让每次探索都有迹可循。</p>
+        <div class="hero-links"><a class="text-link primary" href="#/writing/">阅读文章 <span class="arrow" aria-hidden="true">↗</span></a><a class="text-link" href="#/projects/">查看项目 <span class="arrow" aria-hidden="true">↗</span></a></div>
+      </div>
+      <aside class="note" aria-label="网站理念 先记录 后包装">
+        <div class="note-top"><span>THE LAB NOTE</span><span>NO. 001</span></div>
+        <p class="note-quote">先记录，<br><span>后包装。</span></p>
+        <div class="note-bottom"><span>每一个想法，都值得一次实践。</span><span class="note-icon" aria-hidden="true">↗</span></div>
+      </aside>
+    </section>
+    <section class="section" aria-labelledby="recent-title">
+      <div class="section-head"><div class="section-heading"><span class="section-index" aria-hidden="true">01</span><h2 id="recent-title">最近文章</h2></div><a class="text-link" href="#/writing/">全部文章 <span aria-hidden="true">↗</span></a></div>
+      <ul class="writing-list" id="home-writing">
+        <li class="writing-item"><a class="writing-link" href="#/writing/leons-lab-v1-design/"><time datetime="2026-10-22">2026.10.22</time><div><h3>Leon's Lab V1.0 设计方案</h3><p>从定位到上线：一个以内容为中心、低维护、可迁移的个人技术网站。</p></div><span class="arrow" aria-hidden="true">↗</span></a></li>
+      </ul>
+    </section>
+    <section class="section home-projects" aria-labelledby="featured-title">
+      <div class="section-head"><div class="section-heading"><span class="section-index" aria-hidden="true">02</span><h2 id="featured-title">精选项目</h2></div><a class="text-link" href="#/projects/">全部项目 <span aria-hidden="true">↗</span></a></div>
+      <div class="project-grid" id="home-projects">
+        <a class="project-card" href="#/projects/leons-lab/"><div class="project-top"><span class="project-monogram" aria-hidden="true">&lt; / &gt;</span><span class="status">开发中</span></div><h3>Leon's Lab</h3><p>一个用来记录技术与实践的个人空间。从一份设计方案开始，逐步把想法变成可访问的作品。</p><div class="project-bottom"><span class="tech"><span>HTML</span><span>CSS</span><span>JavaScript</span></span><span class="arrow" aria-hidden="true">↗</span></div></a>
+      </div>
+    </section>
+    <noscript><p class="implementation-note">当前浏览器禁用了 JavaScript。首页仍可阅读；文章、项目与详情切换需要启用 JavaScript。</p></noscript>
+  </main>
+  <footer class="footer"><div class="wrap footer-inner"><p>© <span id="year">2026</span> <span data-site-name>Leon's Lab</span></p><p>记录问题，留下实践。</p><div class="footer-links" id="footer-links" hidden></div></div></footer>
+
+  <template id="writing-template">
+    <header class="page-heading"><p class="eyebrow">WRITING</p><h1 tabindex="-1">文章</h1><p>技术实践、学习记录与一些思考。</p></header>
+    <section class="listing" aria-label="全部文章"><ul class="writing-list" data-writing-list></ul></section>
+  </template>
+  <template id="projects-template">
+    <header class="page-heading"><p class="eyebrow">PROJECTS</p><h1 tabindex="-1">项目</h1><p>从想法出发，在实践中逐步完善。</p></header>
+    <section class="listing" aria-label="全部项目"><div class="project-grid" data-project-list></div></section>
+  </template>
+  <template id="article-template">
+    <article class="detail reading">
+      <a class="back" href="#/writing/"><span aria-hidden="true">←</span> 返回文章列表</a>
+      <header class="detail-header"><p class="eyebrow">DESIGN NOTES</p><h1 tabindex="-1">Leon's Lab V1.0 设计方案</h1><p class="detail-description">从定位到上线：一个以内容为中心、低维护、可迁移的个人技术网站。</p><div class="detail-meta"><span>整理于 <time datetime="2026-10-22">2026.10.22</time></span><span>设计基线 2026.09.22</span></div></header>
+      <aside class="implementation-note"><strong>阅读说明</strong><br>以下完整保留原始 V1.0 设计方案。原文中的 Astro、Markdown 与 Cloudflare Pages 是原规划；你当前访问的是适配 GitHub Pages 的单文件 HTML 版本，使用 # 路由。项目详情说明了当前实现与后续计划。</aside>
+      <div class="article"><blockquote><p>文档状态：设计基线（供Codex实施）<br>版本：V1.0<br>日期：2026-09-22<br>目标：先以Cloudflare Pages免费子域名公开发布，稳定运营后绑定个人域名。<br>说明：<code>leon-lab.pages.dev</code>等地址仅为示例，实际域名以创建项目时的可用结果为准。</p></blockquote>
+<h2>1. 项目定位与设计决策</h2>
+<p><strong>Leon&#x27;s Lab 是用于长期记录个人项目与技术思考的公开技术网站。</strong> 它在产品性质上属于个人技术博客，但页面无需出现“博客”栏目或“个人博客”标语。</p>
+<p>核心原则：</p>
+<ol><li><strong>先记录，后包装</strong>：优先建立容易持续更新的内容系统，而非打造复杂个人品牌站。</li><li><strong>内容为中心</strong>：文章记录问题、探索、实践和观点；项目归档持续迭代的作品。两者可互相关联。</li><li><strong>极简但有审美</strong>：通过字体层级、留白、真实项目图片和克制的强调色提升视觉质量，不依赖重动画。</li><li><strong>低维护、低成本</strong>：静态网站、Markdown管理、Git版本控制、自动部署；第一版不购买域名、不租服务器、不建数据库。</li><li><strong>可迁移</strong>：源码、Markdown和图片归自己所有；域名、托管平台与内容分离。</li><li><strong>公开发布前审核</strong>：仅发布已确认可以公开的个人内容；不自动同步私人笔记或客户资料。</li></ol>
+<h3>1.1 明确决策</h3>
+<div class="table-scroll"><table><thead><tr><th scope="col">项目</th><th scope="col">V1.0方案</th></tr></thead><tbody><tr><td>站点名称</td><td>Leon&#x27;s Lab（可在统一配置中修改）</td></tr><tr><td>网站性质</td><td>个人技术记录网站</td></tr><tr><td>主要访问人群</td><td>公开互联网访问者，尤其是技术同行</td></tr><tr><td>语言</td><td>中文为主，保留英文技术名称</td></tr><tr><td>顶部导航</td><td><strong>站点Logo/名称（返回首页） · 文章 · 项目</strong></td></tr><tr><td>是否展示“博客”字样</td><td><strong>不必</strong>；“文章”替代“博客”，不另设博客栏目</td></tr><tr><td>内容类型</td><td>文章、项目；不增加第三类内容模型</td></tr><tr><td>第一版域名</td><td>Cloudflare Pages提供的 <code>*.pages.dev</code> 子域名</td></tr><tr><td>后续域名</td><td>购买独立域名后绑定现有站点</td></tr><tr><td>技术框架</td><td>Astro + TypeScript（仅必要处）+ 原生CSS + Markdown</td></tr><tr><td>部署链路</td><td>Windows/PyCharm → GitHub → Cloudflare Pages</td></tr></tbody></table></div>
+<p><strong>命名规则：</strong> UI使用“文章”“项目”；URL分别使用 <code>/writing/</code>、<code>/projects/</code>。站点名称点击返回 <code>/</code>。不单独设置“首页”文字导航。</p>
+<h2>2. 信息架构与页面清单</h2>
+<pre><code class="language-text">Leon&#x27;s Lab (/)
+├── 文章 (/writing/)
+│   └── 文章详情 (/writing/{slug}/)
+└── 项目 (/projects/)
+    └── 项目详情 (/projects/{slug}/)
+
+通用页面：404
+外部链接：GitHub（放在页脚；确有公开主页后再显示）</code></pre>
+<p>仅需<strong>3个一级页面（首页、文章、项目）+2类详情模板+404页面</strong>。首页包含精简个人介绍和联系方式，不额外开发About页面。</p>
+<h3>2.1 首页 <code>/</code></h3>
+<p>按如下顺序布局：</p>
+<ol><li><strong>顶部导航</strong>：Leon&#x27;s Lab（返回首页）/文章/项目。移动端优先保持简单文字导航，空间不足再收起。</li><li><strong>Hero</strong>：姓名或笔名、简短定位、一句网站介绍；两个文本链接“阅读文章”“查看项目”。不使用全屏Banner、轮播、虚构统计数据。</li><li><strong>最近文章</strong>：按发布日期倒序显示最多3篇公开文章，标题、简述、日期；不足3篇则按实际数量显示。</li><li><strong>精选项目</strong>：最多2个真实项目卡片，名称、概述、技术关键词、状态；无项目图时使用纯文字卡片。</li><li><strong>页脚</strong>：版权年份、简短说明及已确认可公开的GitHub/联系链接。</li></ol>
+<p>首屏重点是“我在做什么、这里有什么可看”，而不是长篇个人简历。首页无复杂技能进度条、访问量或滚动动画。</p>
+<h3>2.2 文章列表 <code>/writing/</code></h3>
+<ul><li>按发布日期倒序，卡片/列表均可，但优先使用<strong>轻量文本列表</strong>。</li><li>每项包含标题、摘要、发布日期；标签可选，不强制展示分类。</li><li>文章数量少时不做分页和搜索；内容增多后再考虑。</li><li>页面标题使用“文章”，副标题示例：“技术实践、学习记录与一些思考。”</li></ul>
+<h3>2.3 文章详情 <code>/writing/{slug}/</code></h3>
+<ul><li>标题、摘要、发布日期、最后更新日期（有实际修订时显示）。</li><li>Markdown正文：标题、图片、链接、表格、代码块、引用；代码横向滚动，避免移动端溢出。</li><li>正文最大宽度约760px；底部提供“返回文章列表”。</li><li>文章可以持续修订；实质性更正应在文内说明，不伪造验证结果或发布日期。</li><li>不做评论、点赞、全文目录、阅读时长及社交分享弹窗（后续按需）。</li></ul>
+<h3>2.4 项目列表 <code>/projects/</code></h3>
+<ul><li>使用卡片布局：桌面端2列、手机端1列。</li><li>每张卡片展示真实项目名称、简介、主要技术和状态（开发中/已完成）。</li><li>配图为可选项，优先真实截图或架构图；无图不得使用误导性的效果图代替真实成果。</li><li>不强制每个项目拥有公开GitHub仓库或在线Demo。</li></ul>
+<h3>2.5 项目详情 <code>/projects/{slug}/</code></h3>
+<p>统一模板：<strong>项目概述 → 要解决的问题 → 核心功能/技术方案 → 当前进展与验证结果 → 相关文章/外部链接（如有）</strong>。</p>
+<p>项目详情是持续更新的档案；具体技术问题可单独写文章并通过链接关联。未实现的目标应标明“计划”，不能写成已交付成果。</p>
+<h2>3. 视觉设计系统</h2>
+<p>定位：<strong>极简浅色 + 编辑式排版 + 轻微技术感</strong>。参考阅读体验良好的技术杂志/个人作品集，而非商业产品Landing Page。</p>
+<h3>3.1 基础Design Tokens</h3>
+<div class="table-scroll"><table><thead><tr><th scope="col">Token</th><th scope="col">建议值</th><th scope="col">用途</th></tr></thead><tbody><tr><td>Background</td><td><code>#FAFAF8</code></td><td>整体暖白背景</td></tr><tr><td>Foreground</td><td><code>#18181B</code></td><td>标题、正文</td></tr><tr><td>Muted</td><td><code>#71717A</code></td><td>日期、说明</td></tr><tr><td>Accent</td><td><code>#2563EB</code></td><td>链接及少数重点交互</td></tr><tr><td>Border</td><td><code>#E7E7E4</code></td><td>分隔线、卡片轮廓</td></tr><tr><td>内容容器</td><td><code>max-width: 1080px</code></td><td>导航及页面主体</td></tr><tr><td>正文容器</td><td><code>max-width: 760px</code></td><td>长文阅读</td></tr><tr><td>正文字号</td><td><code>16–17px</code></td><td>中文正文</td></tr><tr><td>正文行高</td><td><code>1.7–1.8</code></td><td>阅读体验</td></tr><tr><td>首页Hero标题</td><td>桌面 <code>48–56px</code>；移动 <code>32–40px</code></td><td>建议响应式实现</td></tr><tr><td>卡片圆角</td><td><code>10–12px</code></td><td>少量卡片</td></tr><tr><td>过渡</td><td><code>150–200ms</code></td><td>Hover/Focus等轻过渡</td></tr></tbody></table></div>
+<ul><li>优先系统无衬线字体，必要时使用系统等宽字体显示代码，不依赖第三方字体下载。</li><li>使用设计变量统一管理颜色、间距和排版，避免散落魔法值。</li><li>项目卡片可使用微弱边框与Hover变化，<strong>不要</strong>大量阴影、渐变、发光或粒子动画。</li><li>尊重<code>prefers-reduced-motion</code>；键盘焦点必须清晰可见。</li><li>第一版仅实现精心设计的浅色主题；不为主题切换引入额外复杂度。</li></ul>
+<h3>3.2 响应式与可访问性</h3>
+<ul><li>手机端优先设计，常见屏宽下不出现横向滚动。</li><li>布局可在约768px切换：项目2列→1列；文章始终保持窄阅读区。</li><li>使用语义化HTML，确保标题层级、图像替代文字和交互控件可用。</li><li>保证文字对比度与触屏点击区域，外部链接有清晰语义。</li></ul>
+<h2>4. 内容模型与发布规则</h2>
+<p>使用Astro Content Collections管理两类Markdown：<code>writing</code>与<code>projects</code>。每份内容拥有稳定英文slug；后续改标题不默认改URL。</p>
+<h3>4.1 文章字段（最小集）</h3>
+<pre><code class="language-yaml"># 示例：src/content/writing/langgraph-notes.md
+---
+title: &quot;LangGraph状态管理实践&quot;
+description: &quot;记录一个具体技术问题的分析与验证。&quot;
+pubDate: 2026-09-21
+draft: false
+# updatedDate: 2026-09-22  # 仅在确有更新时填写
+# projectId: &quot;personal-ai-assistant&quot;  # 可选关联
+---</code></pre>
+<h3>4.2 项目字段（最小集）</h3>
+<pre><code class="language-yaml"># 示例：src/content/projects/personal-ai-assistant.md
+---
+title: &quot;Personal AI Assistant&quot;
+description: &quot;个人AI助手实践项目。&quot;
+status: &quot;in-progress&quot;  # in-progress / completed
+featured: true
+draft: false
+# githubUrl: &quot;https://github.com/OWNER/REPO&quot; # 确有公开仓库时填写
+---</code></pre>
+<p>字段由<code>src/content.config.ts</code>统一验证；项目与文章关联通过稳定ID实现。URL slug与内容ID的规则需在实现时统一。</p>
+<p><strong>内容状态尽量简单：</strong> <code>draft: true/false</code>是唯一必须的发布开关；公开文章如尚在探索，可在正文标注“持续更新”，无需单独建立复杂状态机。</p>
+<p><strong>安全边界：</strong> 仅将经过审查、允许公开的内容放进网站仓库。<code>draft: true</code>必须在首页、列表、详情页、站点地图等全部公开输出中被过滤；但<code>draft</code>不等于保密机制。私人草稿、账号、密钥及公司/客户内部资料应保存在仓库之外，不能靠隐藏菜单、前端密码或草稿字段保护。</p>
+<h3>4.3 内容发布流程</h3>
+<pre><code class="language-text">本地随手记录（可在Obsidian）
+  → 选择适合公开的内容
+  → 脱敏、补充证据与实际结果
+  → 编辑网站Markdown及资源文件
+  → 本地预览和构建检查
+  → Git提交并推送
+  → Cloudflare Pages部署
+  → 检查正式网页</code></pre>
+<p>不直接同步整个Obsidian知识库；不要求固定日更。参考节奏：每月发布1–2篇有内容的文章，项目有实质进展时更新，季度复查失效链接和技术版本；这只是建议，不作为强制指标。</p>
+<h2>5. 技术架构与目录</h2>
+<p><strong>技术方案：Astro静态生成 + Markdown + 原生CSS + GitHub + Cloudflare Pages。</strong> 不启用SSR、后台、数据库、登录、API服务或复杂前端状态管理。TypeScript仅用于配置和必要的数据类型，不为了静态页面引入React全站运行时。</p>
+<pre><code class="language-text">personal-website/
+├── public/
+│   ├── favicon.svg
+│   └── images/
+│       ├── writing/
+│       └── projects/
+├── src/
+│   ├── components/
+│   │   ├── SiteHeader.astro
+│   │   ├── SiteFooter.astro
+│   │   ├── WritingItem.astro
+│   │   └── ProjectCard.astro
+│   ├── layouts/
+│   │   ├── BaseLayout.astro
+│   │   └── ArticleLayout.astro
+│   ├── pages/
+│   │   ├── index.astro
+│   │   ├── 404.astro
+│   │   ├── writing/
+│   │   │   ├── index.astro
+│   │   │   └── [slug].astro
+│   │   └── projects/
+│   │       ├── index.astro
+│   │       └── [slug].astro
+│   ├── content/
+│   │   ├── writing/
+│   │   └── projects/
+│   ├── data/
+│   │   └── site.ts
+│   ├── styles/
+│   │   ├── tokens.css
+│   │   ├── global.css
+│   │   └── typography.css
+│   └── content.config.ts
+├── docs/
+│   └── design.md
+├── astro.config.mjs
+├── package.json
+├── package-lock.json
+├── .gitignore
+└── README.md</code></pre>
+<p><code>site.ts</code>统一管理站点名称、简介和已公开的外部链接；<code>astro.config.mjs</code>统一管理实际站点URL。动态路由必须在构建时生成全部公开详情页。</p>
+<h2>6. Cloudflare部署与域名迁移</h2>
+<h3>6.1 第一阶段：免费上线</h3>
+<ol><li>在Windows/PyCharm中创建Astro项目并实现静态页面。</li><li>创建GitHub仓库（可以是Private），提交源码；确保<code>.env</code>、密钥和私人资料未进入仓库。</li><li>在Cloudflare Pages连接GitHub仓库，选择生产分支<code>main</code>。</li><li>构建命令：<code>npm run build</code>；输出目录：<code>dist</code>。首次上线以控制台实际配置与构建日志为准。</li><li>发布后记录<strong>实际分配</strong>的<code>*.pages.dev</code>地址，并写入Astro的<code>site</code>配置；重新构建以生成准确的SEO地址。</li><li>公网逐页验证桌面/手机展示和所有链接；Cloudflare预览部署也应视为可能公开，不放私人内容。</li></ol>
+<p>预算目标为免费计划内¥0；不把未来计划、域名购买费用或可选付费服务算入当前零成本承诺。</p>
+<h3>6.2 第二阶段：成熟后绑定独立域名</h3>
+<ul><li>在同一Cloudflare Pages项目上绑定新域名，不新建内容仓库或重写站点。</li><li>更新集中配置中的<code>site</code>值、规范链接、站点地图及任何确实使用了旧域名的配置。</li><li>站内链接优先使用根路径（如<code>/writing/langgraph-notes/</code>），避免Markdown正文硬编码<code>pages.dev</code>。</li><li>在托管平台支持并配置成功的前提下，对旧地址做<strong>对应路径的301重定向</strong>，而非将所有旧文章统一重定向到首页。</li><li>检查HTTPS、新域名下的全部路由、RSS（如后续启用）和搜索引擎收录设置。</li></ul>
+<p>本阶段仅预留机制，<strong>V1.0不购买或绑定独立域名</strong>。</p>
+<h2>7. V1.0范围与未来版本</h2>
+<h3>7.1 V1.0必须完成</h3>
+<ul><li>首页、文章列表、文章详情、项目列表、项目详情、404页面。</li><li>统一视觉变量和移动端适配。</li><li>Markdown内容模型、草稿过滤、项目与文章可选关联。</li><li>基础SEO（独立title/description、规范URL及站点地图）、语义化页面和基本可访问性。</li><li>GitHub→Cloudflare Pages自动部署及清晰README。</li><li>至少1篇<strong>真实且可公开</strong>的文章、1个<strong>真实且可公开</strong>的项目；不能编造内容填充页面。</li></ul>
+<h3>7.2 不进入V1.0</h3>
+<ul><li>独立About、知识库、专题页、年度回顾独立栏目。</li><li>CMS后台、登录、数据库、评论、点赞、全站搜索。</li><li>AI助手、RAG、在线工具、复杂访问分析。</li><li>深色模式切换、复杂动效、自动Obsidian同步、多语言。</li></ul>
+<h3>7.3 以后按需加入</h3>
+<ul><li><strong>V1.1</strong>：RSS、站内搜索、文章专题、轻量访问统计、可选目录；只有内容或读者需求出现时再做。</li><li><strong>V2.0</strong>：个人域名迁移、年度回顾、项目深化展示；AI能力须有明确需求再评估。</li></ul>
+<h2>8. Codex实施里程碑</h2>
+<div class="table-scroll"><table><thead><tr><th scope="col">阶段</th><th scope="col">交付物</th><th scope="col">验收要点</th></tr></thead><tbody><tr><td>M1 基础与视觉</td><td>Astro骨架、设计变量、布局、导航、首页</td><td>本地正常预览；桌面/手机符合极简风格</td></tr><tr><td>M2 内容与页面</td><td>两类Collection、列表/详情、草稿过滤、相互关联</td><td>新增真实Markdown后自动生成正确页面</td></tr><tr><td>M3 发布质量</td><td>SEO、404、响应式、安全及链接检查、README</td><td><code>npm run build</code>成功；无草稿泄露及明显断链</td></tr><tr><td>M4 公网部署</td><td>GitHub仓库、Cloudflare Pages配置、正式URL</td><td>HTTPS访问正常；新提交可以触发部署</td></tr></tbody></table></div>
+<p>开发原则：先按本文冻结功能范围；每个里程碑可独立构建和验收。实施前只需把示例姓名、站点介绍、真实文章和真实项目资料替换为实际公开内容。</p>
+<h2>9. 上线验收清单</h2>
+<ul class="checklist"><li><span class="check-mark" aria-label="待验收">☐</span>点击Leon&#x27;s Lab返回首页；顶部只有“文章”“项目”两项文字导航。</li><li><span class="check-mark" aria-label="待验收">☐</span>首页介绍、最近文章、精选项目均使用真实内容，不造假或硬凑数量。</li><li><span class="check-mark" aria-label="待验收">☐</span>所有页面在手机和桌面正常显示，代码块可横向滚动。</li><li><span class="check-mark" aria-label="待验收">☐</span>项目卡片、文章列表和详情页URL一致且稳定。</li><li><span class="check-mark" aria-label="待验收">☐</span>所有<code>draft: true</code>内容都不进入公开构建和站点地图。</li><li><span class="check-mark" aria-label="待验收">☐</span>页面标题、摘要、规范URL及站点地图使用实际部署域名。</li><li><span class="check-mark" aria-label="待验收">☐</span>图片有替代文字；键盘访问、焦点和文字对比度可用。</li><li><span class="check-mark" aria-label="待验收">☐</span>源码和构建文件不含API Key、账号信息及未授权资料。</li><li><span class="check-mark" aria-label="待验收">☐</span><code>npm run build</code>通过，无主要死链。</li><li><span class="check-mark" aria-label="待验收">☐</span>Cloudflare生产部署成功，HTTPS可访问且Git推送能触发自动部署。</li><li><span class="check-mark" aria-label="待验收">☐</span>README说明本地开发、添加文章/项目、发布、备份与未来更换域名的方法。</li></ul>
+<h2>10. 最终结论</h2>
+<p>Leon&#x27;s Lab <strong>是个人技术博客，但不需要把“博客”作为页面标签</strong>。第一版以“首页 + 文章 + 项目”构成清晰的信息架构，用Markdown沉淀可迁移内容，用统一设计变量提升审美，用Cloudflare Pages低成本发布。后续是否增加功能，由真实内容量和实际使用需求决定。</p></div>
+      <div class="detail-end"><a class="text-link primary" href="#/projects/leons-lab/">查看关联项目 <span aria-hidden="true">↗</span></a><button type="button" class="download" id="download-design">下载完整设计文档 .md</button></div>
+      <a class="back" href="#/writing/">← 返回文章列表</a>
+    </article>
+  </template>
+  <template id="project-template">
+    <article class="detail reading">
+      <a class="back" href="#/projects/"><span aria-hidden="true">←</span> 返回项目列表</a>
+      <header class="detail-header"><p class="eyebrow">PERSONAL WEBSITE</p><h1 tabindex="-1">Leon's Lab</h1><p class="detail-description">一个长期记录个人项目、技术实践与思考的公开空间。</p><div class="detail-meta"><span class="status">开发中</span><span class="tech"><span>HTML</span><span>CSS</span><span>JavaScript</span><span>GitHub Pages</span></span></div></header>
+      <div class="article">
+        <h2>项目概述</h2><p>Leon's Lab 是个人技术记录网站，以“文章”和“项目”组织内容。文章记录问题、探索与实践；项目归档持续迭代的作品，两类内容通过链接关联。</p><p>当前版本将网站放进一个 <code>index.html</code> 文件，样式、内容和交互全部内嵌，无需安装依赖或运行构建命令，可直接部署到 GitHub Pages。</p>
+        <h2>要解决的问题</h2><ul><li>让零散的技术记录有清晰、可持续更新的公开入口。</li><li>将项目的目标、实现进展与真实结果集中呈现。</li><li>用简单的发布方式降低维护成本，保留源文件与内容的可迁移性。</li></ul>
+        <h2>核心功能与技术方案</h2><ul><li>首页展示精简介绍、最近文章与精选项目。</li><li>提供文章列表、项目列表以及各自的详情视图。</li><li>使用暖白背景、系统字体、编辑式排版与克制的蓝色强调。</li><li>使用 Hash 路由，例如 <code>#/writing/</code>，兼容个人域名和带仓库子路径的 GitHub Pages。</li><li>浏览器前进、后退及刷新保留对应视图；未知 Hash 显示站内未找到页面。</li><li>手机端采用单列布局，长代码块和表格在各自容器内横向滚动。</li><li>完整保留原始设计方案，并支持下载为 Markdown 文件。</li></ul>
+        <h2>当前进展与验证结果</h2><p>当前交付物是单文件静态网站，预置内容来自本项目的真实设计方案。尚未提供 GitHub 仓库地址，因此不将公网部署、HTTPS 或搜索引擎收录写为已完成结果。</p><p>这是便于快速上线的单文件实现，并非原方案要求的完整 Astro 工程。当前没有独立路径文章页、自动 Markdown 构建、站点地图或服务端 HTTP 404；Hash 页面也不具备独立静态页面的完整搜索引擎能力。</p>
+        <h2>后续计划</h2><p>计划在真实内容增加后迁移到 Astro 与 Markdown，继续使用稳定的文章和项目标识，补充独立页面、内容校验、站点地图及更完整的 SEO。是否迁移托管平台、绑定独立域名，由实际需要决定。</p>
+        <h2>相关文章</h2><p><a href="#/writing/leons-lab-v1-design/">Leon's Lab V1.0 设计方案</a>：完整记录定位、信息架构、视觉规范、内容模型、部署、里程碑与验收清单。</p>
+      </div>
+      <div class="detail-end"><a class="text-link primary" href="#/projects/">← 返回项目列表</a><a class="text-link" href="#/writing/leons-lab-v1-design/">阅读设计方案 <span aria-hidden="true">↗</span></a></div>
+    </article>
+  </template>
+  <template id="404-template"><section class="not-found"><p class="code">404 / NOT FOUND</p><h1 tabindex="-1">这条线索暂时没有找到。</h1><p>页面可能已移动，也可能还没有开始记录。</p><a class="text-link primary" href="#/">返回首页 <span aria-hidden="true">↗</span></a></section></template>
+  <script id="design-source" type="text/plain"># Leon's Lab — 个人技术网站 V1.0 设计方案
+
+> 文档状态：设计基线（供Codex实施）  
+> 版本：V1.0  
+> 日期：2026-09-22  
+> 目标：先以Cloudflare Pages免费子域名公开发布，稳定运营后绑定个人域名。  
+> 说明：`leon-lab.pages.dev`等地址仅为示例，实际域名以创建项目时的可用结果为准。
+
+## 1. 项目定位与设计决策
+
+**Leon's Lab 是用于长期记录个人项目与技术思考的公开技术网站。** 它在产品性质上属于个人技术博客，但页面无需出现“博客”栏目或“个人博客”标语。
+
+核心原则：
+
+1. **先记录，后包装**：优先建立容易持续更新的内容系统，而非打造复杂个人品牌站。
+2. **内容为中心**：文章记录问题、探索、实践和观点；项目归档持续迭代的作品。两者可互相关联。
+3. **极简但有审美**：通过字体层级、留白、真实项目图片和克制的强调色提升视觉质量，不依赖重动画。
+4. **低维护、低成本**：静态网站、Markdown管理、Git版本控制、自动部署；第一版不购买域名、不租服务器、不建数据库。
+5. **可迁移**：源码、Markdown和图片归自己所有；域名、托管平台与内容分离。
+6. **公开发布前审核**：仅发布已确认可以公开的个人内容；不自动同步私人笔记或客户资料。
+
+### 1.1 明确决策
+
+| 项目 | V1.0方案 |
+| --- | --- |
+| 站点名称 | Leon's Lab（可在统一配置中修改） |
+| 网站性质 | 个人技术记录网站 |
+| 主要访问人群 | 公开互联网访问者，尤其是技术同行 |
+| 语言 | 中文为主，保留英文技术名称 |
+| 顶部导航 | **站点Logo/名称（返回首页） · 文章 · 项目** |
+| 是否展示“博客”字样 | **不必**；“文章”替代“博客”，不另设博客栏目 |
+| 内容类型 | 文章、项目；不增加第三类内容模型 |
+| 第一版域名 | Cloudflare Pages提供的 `*.pages.dev` 子域名 |
+| 后续域名 | 购买独立域名后绑定现有站点 |
+| 技术框架 | Astro + TypeScript（仅必要处）+ 原生CSS + Markdown |
+| 部署链路 | Windows/PyCharm → GitHub → Cloudflare Pages |
+
+**命名规则：** UI使用“文章”“项目”；URL分别使用 `/writing/`、`/projects/`。站点名称点击返回 `/`。不单独设置“首页”文字导航。
+
+## 2. 信息架构与页面清单
+
+```text
+Leon's Lab (/)
+├── 文章 (/writing/)
+│   └── 文章详情 (/writing/{slug}/)
+└── 项目 (/projects/)
+    └── 项目详情 (/projects/{slug}/)
+
+通用页面：404
+外部链接：GitHub（放在页脚；确有公开主页后再显示）
+```
+
+仅需**3个一级页面（首页、文章、项目）+2类详情模板+404页面**。首页包含精简个人介绍和联系方式，不额外开发About页面。
+
+### 2.1 首页 `/`
+
+按如下顺序布局：
+
+1. **顶部导航**：Leon's Lab（返回首页）/文章/项目。移动端优先保持简单文字导航，空间不足再收起。
+2. **Hero**：姓名或笔名、简短定位、一句网站介绍；两个文本链接“阅读文章”“查看项目”。不使用全屏Banner、轮播、虚构统计数据。
+3. **最近文章**：按发布日期倒序显示最多3篇公开文章，标题、简述、日期；不足3篇则按实际数量显示。
+4. **精选项目**：最多2个真实项目卡片，名称、概述、技术关键词、状态；无项目图时使用纯文字卡片。
+5. **页脚**：版权年份、简短说明及已确认可公开的GitHub/联系链接。
+
+首屏重点是“我在做什么、这里有什么可看”，而不是长篇个人简历。首页无复杂技能进度条、访问量或滚动动画。
+
+### 2.2 文章列表 `/writing/`
+
+- 按发布日期倒序，卡片/列表均可，但优先使用**轻量文本列表**。
+- 每项包含标题、摘要、发布日期；标签可选，不强制展示分类。
+- 文章数量少时不做分页和搜索；内容增多后再考虑。
+- 页面标题使用“文章”，副标题示例：“技术实践、学习记录与一些思考。”
+
+### 2.3 文章详情 `/writing/{slug}/`
+
+- 标题、摘要、发布日期、最后更新日期（有实际修订时显示）。
+- Markdown正文：标题、图片、链接、表格、代码块、引用；代码横向滚动，避免移动端溢出。
+- 正文最大宽度约760px；底部提供“返回文章列表”。
+- 文章可以持续修订；实质性更正应在文内说明，不伪造验证结果或发布日期。
+- 不做评论、点赞、全文目录、阅读时长及社交分享弹窗（后续按需）。
+
+### 2.4 项目列表 `/projects/`
+
+- 使用卡片布局：桌面端2列、手机端1列。
+- 每张卡片展示真实项目名称、简介、主要技术和状态（开发中/已完成）。
+- 配图为可选项，优先真实截图或架构图；无图不得使用误导性的效果图代替真实成果。
+- 不强制每个项目拥有公开GitHub仓库或在线Demo。
+
+### 2.5 项目详情 `/projects/{slug}/`
+
+统一模板：**项目概述 → 要解决的问题 → 核心功能/技术方案 → 当前进展与验证结果 → 相关文章/外部链接（如有）**。
+
+项目详情是持续更新的档案；具体技术问题可单独写文章并通过链接关联。未实现的目标应标明“计划”，不能写成已交付成果。
+
+## 3. 视觉设计系统
+
+定位：**极简浅色 + 编辑式排版 + 轻微技术感**。参考阅读体验良好的技术杂志/个人作品集，而非商业产品Landing Page。
+
+### 3.1 基础Design Tokens
+
+| Token | 建议值 | 用途 |
+| --- | --- | --- |
+| Background | `#FAFAF8` | 整体暖白背景 |
+| Foreground | `#18181B` | 标题、正文 |
+| Muted | `#71717A` | 日期、说明 |
+| Accent | `#2563EB` | 链接及少数重点交互 |
+| Border | `#E7E7E4` | 分隔线、卡片轮廓 |
+| 内容容器 | `max-width: 1080px` | 导航及页面主体 |
+| 正文容器 | `max-width: 760px` | 长文阅读 |
+| 正文字号 | `16–17px` | 中文正文 |
+| 正文行高 | `1.7–1.8` | 阅读体验 |
+| 首页Hero标题 | 桌面 `48–56px`；移动 `32–40px` | 建议响应式实现 |
+| 卡片圆角 | `10–12px` | 少量卡片 |
+| 过渡 | `150–200ms` | Hover/Focus等轻过渡 |
+
+- 优先系统无衬线字体，必要时使用系统等宽字体显示代码，不依赖第三方字体下载。
+- 使用设计变量统一管理颜色、间距和排版，避免散落魔法值。
+- 项目卡片可使用微弱边框与Hover变化，**不要**大量阴影、渐变、发光或粒子动画。
+- 尊重`prefers-reduced-motion`；键盘焦点必须清晰可见。
+- 第一版仅实现精心设计的浅色主题；不为主题切换引入额外复杂度。
+
+### 3.2 响应式与可访问性
+
+- 手机端优先设计，常见屏宽下不出现横向滚动。
+- 布局可在约768px切换：项目2列→1列；文章始终保持窄阅读区。
+- 使用语义化HTML，确保标题层级、图像替代文字和交互控件可用。
+- 保证文字对比度与触屏点击区域，外部链接有清晰语义。
+
+## 4. 内容模型与发布规则
+
+使用Astro Content Collections管理两类Markdown：`writing`与`projects`。每份内容拥有稳定英文slug；后续改标题不默认改URL。
+
+### 4.1 文章字段（最小集）
+
+```yaml
+# 示例：src/content/writing/langgraph-notes.md
+---
+title: "LangGraph状态管理实践"
+description: "记录一个具体技术问题的分析与验证。"
+pubDate: 2026-09-21
+draft: false
+# updatedDate: 2026-09-22  # 仅在确有更新时填写
+# projectId: "personal-ai-assistant"  # 可选关联
+---
+```
+
+### 4.2 项目字段（最小集）
+
+```yaml
+# 示例：src/content/projects/personal-ai-assistant.md
+---
+title: "Personal AI Assistant"
+description: "个人AI助手实践项目。"
+status: "in-progress"  # in-progress / completed
+featured: true
+draft: false
+# githubUrl: "https://github.com/OWNER/REPO" # 确有公开仓库时填写
+---
+```
+
+字段由`src/content.config.ts`统一验证；项目与文章关联通过稳定ID实现。URL slug与内容ID的规则需在实现时统一。
+
+**内容状态尽量简单：** `draft: true/false`是唯一必须的发布开关；公开文章如尚在探索，可在正文标注“持续更新”，无需单独建立复杂状态机。
+
+**安全边界：** 仅将经过审查、允许公开的内容放进网站仓库。`draft: true`必须在首页、列表、详情页、站点地图等全部公开输出中被过滤；但`draft`不等于保密机制。私人草稿、账号、密钥及公司/客户内部资料应保存在仓库之外，不能靠隐藏菜单、前端密码或草稿字段保护。
+
+### 4.3 内容发布流程
+
+```text
+本地随手记录（可在Obsidian）
+  → 选择适合公开的内容
+  → 脱敏、补充证据与实际结果
+  → 编辑网站Markdown及资源文件
+  → 本地预览和构建检查
+  → Git提交并推送
+  → Cloudflare Pages部署
+  → 检查正式网页
+```
+
+不直接同步整个Obsidian知识库；不要求固定日更。参考节奏：每月发布1–2篇有内容的文章，项目有实质进展时更新，季度复查失效链接和技术版本；这只是建议，不作为强制指标。
+
+## 5. 技术架构与目录
+
+**技术方案：Astro静态生成 + Markdown + 原生CSS + GitHub + Cloudflare Pages。** 不启用SSR、后台、数据库、登录、API服务或复杂前端状态管理。TypeScript仅用于配置和必要的数据类型，不为了静态页面引入React全站运行时。
+
+```text
+personal-website/
+├── public/
+│   ├── favicon.svg
+│   └── images/
+│       ├── writing/
+│       └── projects/
+├── src/
+│   ├── components/
+│   │   ├── SiteHeader.astro
+│   │   ├── SiteFooter.astro
+│   │   ├── WritingItem.astro
+│   │   └── ProjectCard.astro
+│   ├── layouts/
+│   │   ├── BaseLayout.astro
+│   │   └── ArticleLayout.astro
+│   ├── pages/
+│   │   ├── index.astro
+│   │   ├── 404.astro
+│   │   ├── writing/
+│   │   │   ├── index.astro
+│   │   │   └── [slug].astro
+│   │   └── projects/
+│   │       ├── index.astro
+│   │       └── [slug].astro
+│   ├── content/
+│   │   ├── writing/
+│   │   └── projects/
+│   ├── data/
+│   │   └── site.ts
+│   ├── styles/
+│   │   ├── tokens.css
+│   │   ├── global.css
+│   │   └── typography.css
+│   └── content.config.ts
+├── docs/
+│   └── design.md
+├── astro.config.mjs
+├── package.json
+├── package-lock.json
+├── .gitignore
+└── README.md
+```
+
+`site.ts`统一管理站点名称、简介和已公开的外部链接；`astro.config.mjs`统一管理实际站点URL。动态路由必须在构建时生成全部公开详情页。
+
+## 6. Cloudflare部署与域名迁移
+
+### 6.1 第一阶段：免费上线
+
+1. 在Windows/PyCharm中创建Astro项目并实现静态页面。
+2. 创建GitHub仓库（可以是Private），提交源码；确保`.env`、密钥和私人资料未进入仓库。
+3. 在Cloudflare Pages连接GitHub仓库，选择生产分支`main`。
+4. 构建命令：`npm run build`；输出目录：`dist`。首次上线以控制台实际配置与构建日志为准。
+5. 发布后记录**实际分配**的`*.pages.dev`地址，并写入Astro的`site`配置；重新构建以生成准确的SEO地址。
+6. 公网逐页验证桌面/手机展示和所有链接；Cloudflare预览部署也应视为可能公开，不放私人内容。
+
+预算目标为免费计划内¥0；不把未来计划、域名购买费用或可选付费服务算入当前零成本承诺。
+
+### 6.2 第二阶段：成熟后绑定独立域名
+
+- 在同一Cloudflare Pages项目上绑定新域名，不新建内容仓库或重写站点。
+- 更新集中配置中的`site`值、规范链接、站点地图及任何确实使用了旧域名的配置。
+- 站内链接优先使用根路径（如`/writing/langgraph-notes/`），避免Markdown正文硬编码`pages.dev`。
+- 在托管平台支持并配置成功的前提下，对旧地址做**对应路径的301重定向**，而非将所有旧文章统一重定向到首页。
+- 检查HTTPS、新域名下的全部路由、RSS（如后续启用）和搜索引擎收录设置。
+
+本阶段仅预留机制，**V1.0不购买或绑定独立域名**。
+
+## 7. V1.0范围与未来版本
+
+### 7.1 V1.0必须完成
+
+- 首页、文章列表、文章详情、项目列表、项目详情、404页面。
+- 统一视觉变量和移动端适配。
+- Markdown内容模型、草稿过滤、项目与文章可选关联。
+- 基础SEO（独立title/description、规范URL及站点地图）、语义化页面和基本可访问性。
+- GitHub→Cloudflare Pages自动部署及清晰README。
+- 至少1篇**真实且可公开**的文章、1个**真实且可公开**的项目；不能编造内容填充页面。
+
+### 7.2 不进入V1.0
+
+- 独立About、知识库、专题页、年度回顾独立栏目。
+- CMS后台、登录、数据库、评论、点赞、全站搜索。
+- AI助手、RAG、在线工具、复杂访问分析。
+- 深色模式切换、复杂动效、自动Obsidian同步、多语言。
+
+### 7.3 以后按需加入
+
+- **V1.1**：RSS、站内搜索、文章专题、轻量访问统计、可选目录；只有内容或读者需求出现时再做。
+- **V2.0**：个人域名迁移、年度回顾、项目深化展示；AI能力须有明确需求再评估。
+
+## 8. Codex实施里程碑
+
+| 阶段 | 交付物 | 验收要点 |
+| --- | --- | --- |
+| M1 基础与视觉 | Astro骨架、设计变量、布局、导航、首页 | 本地正常预览；桌面/手机符合极简风格 |
+| M2 内容与页面 | 两类Collection、列表/详情、草稿过滤、相互关联 | 新增真实Markdown后自动生成正确页面 |
+| M3 发布质量 | SEO、404、响应式、安全及链接检查、README | `npm run build`成功；无草稿泄露及明显断链 |
+| M4 公网部署 | GitHub仓库、Cloudflare Pages配置、正式URL | HTTPS访问正常；新提交可以触发部署 |
+
+开发原则：先按本文冻结功能范围；每个里程碑可独立构建和验收。实施前只需把示例姓名、站点介绍、真实文章和真实项目资料替换为实际公开内容。
+
+## 9. 上线验收清单
+
+- [ ] 点击Leon's Lab返回首页；顶部只有“文章”“项目”两项文字导航。
+- [ ] 首页介绍、最近文章、精选项目均使用真实内容，不造假或硬凑数量。
+- [ ] 所有页面在手机和桌面正常显示，代码块可横向滚动。
+- [ ] 项目卡片、文章列表和详情页URL一致且稳定。
+- [ ] 所有`draft: true`内容都不进入公开构建和站点地图。
+- [ ] 页面标题、摘要、规范URL及站点地图使用实际部署域名。
+- [ ] 图片有替代文字；键盘访问、焦点和文字对比度可用。
+- [ ] 源码和构建文件不含API Key、账号信息及未授权资料。
+- [ ] `npm run build`通过，无主要死链。
+- [ ] Cloudflare生产部署成功，HTTPS可访问且Git推送能触发自动部署。
+- [ ] README说明本地开发、添加文章/项目、发布、备份与未来更换域名的方法。
+
+## 10. 最终结论
+
+Leon's Lab **是个人技术博客，但不需要把“博客”作为页面标签**。第一版以“首页 + 文章 + 项目”构成清晰的信息架构，用Markdown沉淀可迁移内容，用统一设计变量提升审美，用Cloudflare Pages低成本发布。后续是否增加功能，由真实内容量和实际使用需求决定。
+</script>
+  <script>
+    'use strict';
+    /*
+     * LEON'S LAB — 单文件网站维护说明
+     * 1. 上传本文件到 GitHub 仓库根目录，保持名称 index.html。
+     * 2. Settings > Pages > Deploy from a branch > main > /(root) > Save。
+     * 3. 下方 SITE 管理站名与公开链接；没有真实公开链接时保留空字符串。
+     * 4. 增加文章/项目：添加对应 template，再在 CONTENT 中登记稳定 id。
+     *    template 第一项应包含 h1；列表由 CONTENT 自动生成。
+     * 5. 只放允许公开的内容。不要把私人草稿写在本文件中。
+     *    前端 draft 过滤不是保密措施，源代码和 template 仍可被读取。
+     * 6. 原设计方案保留在 design-source，正文是静态 HTML，不在运行时解析 Markdown。
+     * 7. 本文件无需 npm、构建、CDN、数据库或 API Key。
+     */
+    const SITE = {
+      name: "Leon's Lab",
+      description: "Leon's Lab，记录个人项目、技术实践与一些思考。",
+      githubUrl: '', // 例如 https://github.com/你的真实用户名
+      contactUrl: '' // 例如 mailto:你确认可以公开的邮箱
+    };
+    // 仅登记公开内容。不要把私人草稿或未授权资料留在数组、模板、注释中。
+    const CONTENT = {
+      writing: [{ id:'leons-lab-v1-design', title:"Leon's Lab V1.0 设计方案", description:'从定位到上线：一个以内容为中心、低维护、可迁移的个人技术网站。', pubDate:'2026-10-22', draft:false, projectId:'leons-lab', template:'article-template' }],
+      projects: [{ id:'leons-lab', title:"Leon's Lab", description:'一个用来记录技术与实践的个人空间。从一份设计方案开始，逐步把想法变成可访问的作品。', status:'in-progress', featured:true, draft:false, tech:['HTML','CSS','JavaScript'], template:'project-template' }]
+    };
+    const main = document.getElementById('main');
+    const homeHTML = main.innerHTML;
+    const metaDescription = document.querySelector('meta[name="description"]');
+    const publicWriting = () => CONTENT.writing.filter(x => x.draft === false).sort((a,b) => b.pubDate.localeCompare(a.pubDate));
+    const publicProjects = () => CONTENT.projects.filter(x => x.draft === false);
+    const escapeHTML = value => String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    const shortDate = value => value.replaceAll('-','.');
+    function writingHTML(items) {
+      if (!items.length) return '<li class="empty">新的文章正在整理中。</li>';
+      return items.map(item => `<li class="writing-item"><a class="writing-link" href="#/writing/${encodeURIComponent(item.id)}/"><time datetime="${escapeHTML(item.pubDate)}">${escapeHTML(shortDate(item.pubDate))}</time><div><h3>${escapeHTML(item.title)}</h3><p>${escapeHTML(item.description)}</p></div><span class="arrow" aria-hidden="true">↗</span></a></li>`).join('');
+    }
+    function projectsHTML(items) {
+      if (!items.length) return '<p class="empty">新的项目正在整理中。</p>';
+      return items.map(item => `<a class="project-card" href="#/projects/${encodeURIComponent(item.id)}/"><div class="project-top"><span class="project-monogram" aria-hidden="true">&lt; / &gt;</span><span class="status">${item.status === 'completed' ? '已完成' : '开发中'}</span></div><h3>${escapeHTML(item.title)}</h3><p>${escapeHTML(item.description)}</p><div class="project-bottom"><span class="tech">${item.tech.map(t=>`<span>${escapeHTML(t)}</span>`).join('')}</span><span class="arrow" aria-hidden="true">↗</span></div></a>`).join('');
+    }
+    function templateHTML(id) { return document.getElementById(id).innerHTML; }
+    function setupFooter() {
+      document.querySelectorAll('[data-site-name]').forEach(el => el.textContent = SITE.name);
+      document.querySelector('.brand').setAttribute('aria-label', SITE.name + ' 返回首页');
+      document.getElementById('year').textContent = new Date().getFullYear();
+      const links = document.getElementById('footer-links');
+      for (const [label,url] of [['GitHub',SITE.githubUrl],['联系我',SITE.contactUrl]]) {
+        if (!url) continue;
+        let parsed; try { parsed = new URL(url); } catch { continue; }
+        if (!['https:','mailto:'].includes(parsed.protocol)) continue;
+        const link=document.createElement('a'); link.href=parsed.href; link.textContent=label+' ↗';
+        if (parsed.protocol==='https:') { link.target='_blank'; link.rel='noopener noreferrer'; }
+        links.appendChild(link); links.hidden=false;
+      }
+    }
+    function render(initial=false) {
+      if (location.hash === '#main') { main.focus(); return; }
+      let route = location.hash.slice(1) || '/';
+      try { route=decodeURIComponent(route); } catch { route='/invalid-route/'; }
+      if (!route.endsWith('/')) route+='/';
+      let title = SITE.name+' · 记录与实践', description=SITE.description, section='', html='';
+      if (route === '/') {
+        html=homeHTML;
+      } else if (route === '/writing/') {
+        html=templateHTML('writing-template'); title='文章 · '+SITE.name; section='writing'; description='技术实践、学习记录与一些思考。';
+      } else if (route === '/projects/') {
+        html=templateHTML('projects-template'); title='项目 · '+SITE.name; section='projects'; description='从想法出发，在实践中逐步完善。';
+      } else {
+        const match=route.match(/^\/(writing|projects)\/([^/]+)\/$/);
+        const item=match && (match[1]==='writing' ? publicWriting() : publicProjects()).find(x=>x.id===match[2]);
+        if (item) { html=templateHTML(item.template); title=item.title === SITE.name ? SITE.name+' · 项目' : item.title+' · '+SITE.name; description=item.description; section=match[1]; }
+        else { html=templateHTML('404-template'); title='未找到页面 · '+SITE.name; description='这条线索暂时没有找到。'; }
+      }
+      main.innerHTML=html;
+      const wl=main.querySelector('[data-writing-list]'); if(wl) wl.innerHTML=writingHTML(publicWriting());
+      const pl=main.querySelector('[data-project-list]'); if(pl) pl.innerHTML=projectsHTML(publicProjects());
+      const hw=main.querySelector('#home-writing'); if(hw) hw.innerHTML=writingHTML(publicWriting().slice(0,3));
+      const hp=main.querySelector('#home-projects'); if(hp) hp.innerHTML=projectsHTML(publicProjects().filter(x=>x.featured).slice(0,2));
+      document.title=title; metaDescription.setAttribute('content',description);
+      document.querySelectorAll('[data-nav]').forEach(el => { if(el.dataset.nav===section) el.setAttribute('aria-current','page'); else el.removeAttribute('aria-current'); });
+      const download=main.querySelector('#download-design');
+      if(download) download.addEventListener('click',downloadDesign);
+      main.querySelectorAll('.article pre,.table-scroll').forEach(el => { el.tabIndex=0; el.setAttribute('role','region'); el.setAttribute('aria-label',el.matches('pre')?'代码示例，可横向滚动':'数据表格，可横向滚动'); });
+      if(!initial) { window.scrollTo({top:0,left:0,behavior:'instant'}); const h1=main.querySelector('h1'); if(h1) {h1.setAttribute('tabindex','-1'); h1.focus({preventScroll:true});} }
+    }
+    function downloadDesign() {
+      const blob=new Blob([document.getElementById('design-source').textContent],{type:'text/markdown;charset=utf-8'});
+      const url=URL.createObjectURL(blob), a=document.createElement('a');
+      a.href=url; a.download='leons-lab-v1-design.md'; document.body.appendChild(a); a.click(); a.remove();
+      window.setTimeout(()=>URL.revokeObjectURL(url),1000);
+    }
+    setupFooter(); window.addEventListener('hashchange',()=>render()); render(true);
+  </script>
+</body>
+</html>
